@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Estate Audit - Interactive Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #D97706;
+            --dark: #0f0f0f;
+            --charcoal: #262626;
+            --light: #ffffff;
+            --gray: #737373;
+            --light-gray: #f5f5f5;
+            --border: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden;
+            background: #e8e8e8;
+            color: var(--dark);
+        }
+
+        #viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            cursor: grab;
+            position: relative;
+        }
+
+        #viewport.grabbing {
+            cursor: grabbing;
+        }
+
+        #canvas {
+            width: 6000px;
+            height: 5500px;
+            position: absolute;
+            transform-origin: 0 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Connector Lines */
+        .connector-line {
+            position: absolute;
+            stroke: var(--orange);
+            stroke-width: 3;
+            stroke-dasharray: 8, 6;
+            fill: none;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .card {
+            position: absolute;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: box-shadow 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        /* Hero */
+        .hero-card {
+            top: 300px;
+            left: 400px;
+            width: 650px;
+            background: var(--dark);
+            color: white;
+            padding: 4rem;
+        }
+
+        .hero-card h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-card .tagline {
+            font-size: 0.875rem;
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .hero-card .subtitle {
+            font-size: 1.25rem;
+            color: #a3a3a3;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* Calculator */
+        .calculator-card {
+            top: 250px;
+            left: 1400px;
+            width: 700px;
+            transform: rotate(-1deg);
+        }
+
+        .calculator-card h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .calculator-card .subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .slider-container {
+            margin: 2rem 0;
+        }
+
+        .slider-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .slider {
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--dark);
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--dark);
+            cursor: pointer;
+            border: none;
+        }
+
+        .calc-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .result-value.loss {
+            color: var(--orange);
+        }
+
+        .result-sublabel {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .note {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Timeline Cards */
+        .timeline-card {
+            width: 420px;
+            padding: 2rem;
+        }
+
+        .timeline-year {
+            font-size: 1rem;
+            color: var(--orange);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-card p {
+            color: var(--gray);
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        /* Vector Cards */
+        .vector-card {
+            width: 340px;
+            padding: 2rem;
+        }
+
+        .vector-number {
+            font-size: 0.75rem;
+            color: var(--orange);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .vector-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .vector-card p {
+            color: var(--gray);
+            font-weight: 300;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Score Card */
+        .score-card {
+            top: 2600px;
+            left: 3200px;
+            width: 800px;
+            transform: rotate(0.5deg);
+        }
+
+        .score-card h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-card .subtitle {
+            color: var(--gray);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .score-item {
+            margin-bottom: 2rem;
+        }
+
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .score-bar {
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: var(--dark);
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        .overall-score {
+            margin-top: 3rem;
+            padding: 2.5rem;
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .overall-score-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #a3a3a3;
+            margin-bottom: 1rem;
+        }
+
+        .overall-score-value {
+            font-size: 4.5rem;
+            font-weight: 600;
+            color: var(--orange);
+        }
+
+        /* ROI Card */
+        .roi-card {
+            top: 3600px;
+            left: 600px;
+            width: 900px;
+            transform: rotate(-0.5deg);
+        }
+
+        .roi-card h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .roi-card .subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .credit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .credit-option {
+            padding: 2rem 1.5rem;
+            background: var(--light-gray);
+            border: 2px solid transparent;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .credit-option:hover {
+            border-color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .credit-option.selected {
+            border-color: var(--dark);
+            background: white;
+        }
+
+        .credit-amount {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .credit-cost {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--orange);
+            margin: 0.5rem 0;
+        }
+
+        .credit-detail {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .credit-badge {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        .resell-control {
+            margin: 2rem 0;
+        }
+
+        .resell-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .roi-result {
+            background: var(--dark);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 2rem;
+        }
+
+        .roi-main-value {
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--orange);
+            margin: 1rem 0;
+        }
+
+        .roi-breakdown {
+            color: #a3a3a3;
+            margin-top: 1rem;
+        }
+
+        .roi-multiplier {
+            margin-top: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Deliverables */
+        .deliverable-card {
+            width: 360px;
+            padding: 2rem;
+        }
+
+        .deliverable-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .deliverable-card p {
+            color: var(--gray);
+            font-weight: 300;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Section Labels */
+        .section-label {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.6;
+        }
+
+        /* Controls */
+        .controls {
+            display: none;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: var(--light-gray);
+            border-color: var(--dark);
+        }
+
+        .zoom-level {
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--gray);
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        /* Hotkeys */
+        .hotkeys {
+            display: none;
+        }
+
+        .hotkeys-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray);
+        }
+
+        .hotkey-item {
+            display: flex;
+            gap: 1rem;
+            margin: 0.5rem 0;
+            align-items: center;
+        }
+
+        .hotkey-key {
+            background: var(--light-gray);
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .hotkey-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Section Indicator */
+        .section-indicator {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--dark);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .section-indicator.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Overview Button */
+        .overview-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            color: var(--dark);
+            border: 2px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+
+        .overview-btn:hover {
+            opacity: 1;
+            border-color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Mobile Navigation Controls */
+        .mobile-nav {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+            gap: 0.5rem;
+        }
+
+        .mobile-nav-btn {
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: var(--dark);
+        }
+
+        .mobile-nav-btn:active {
+            background: var(--light-gray);
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav {
+                display: flex;
+            }
+
+            .overview-btn {
+                bottom: 6rem;
+                right: 1rem;
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .section-indicator {
+                top: 1rem;
+                right: 1rem;
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* Mini-map */
+        .minimap {
+            display: none;
+        }
+
+        .minimap-canvas {
+            width: 100%;
+            height: 100%;
+            background: var(--light-gray);
+            position: relative;
+        }
+
+        .minimap-viewport {
+            position: absolute;
+            border: 2px solid var(--orange);
+            background: rgba(217, 119, 6, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="hotkeys">
+        <div class="hotkeys-title">Navigation</div>
+        <div class="hotkey-item"><span class="hotkey-key">1-7</span><span class="hotkey-label">Jump to section</span></div>
+        <div class="hotkey-item"><span class="hotkey-key">+/-</span><span class="hotkey-label">Zoom in/out</span></div>
+        <div class="hotkey-item"><span class="hotkey-key">0</span><span class="hotkey-label">Reset view</span></div>
+        <div class="hotkey-item"><span class="hotkey-key">Drag</span><span class="hotkey-label">Pan around</span></div>
+    </div>
+
+    <div class="minimap">
+        <div class="minimap-canvas" id="minimapCanvas">
+            <div class="minimap-viewport" id="minimapViewport"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" id="zoomOut">−</button>
+        <div class="zoom-level" id="zoomLevel">100%</div>
+        <button class="control-btn" id="zoomIn">+</button>
+        <button class="control-btn" id="resetView" style="margin-left: 0.5rem;">⌂</button>
+    </div>
+
+    <div class="section-indicator" id="sectionIndicator"></div>
+    <button class="overview-btn" id="overviewBtn">Overview</button>
+
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-btn" id="prevBtn">←</button>
+        <button class="mobile-nav-btn" id="nextBtn">→</button>
+    </div>
+
+    <div id="viewport">
+        <div id="canvas">
+            <!-- SVG for connector lines -->
+            <svg width="6000" height="5500" style="position: absolute; top: 0; left: 0; pointer-events: none;">
+                <!-- Hero to Calculator -->
+                <path class="connector-line" d="M 1050 500 Q 1200 450, 1400 450" />
+
+                <!-- Calculator to Timeline cluster -->
+                <path class="connector-line" d="M 1750 750 Q 1500 900, 1100 1200" />
+
+                <!-- Timeline cluster connections -->
+                <path class="connector-line" d="M 820 1400 L 950 1700" />
+                <path class="connector-line" d="M 1250 1400 L 1350 1700" />
+
+                <!-- Timeline to Vectors -->
+                <path class="connector-line" d="M 1400 1700 Q 2000 1300, 2800 1100" />
+
+                <!-- Vectors cluster connections -->
+                <path class="connector-line" d="M 3050 1200 L 3150 1500" />
+                <path class="connector-line" d="M 3600 1200 L 3700 1500" />
+
+                <!-- Vectors to KEEP Score -->
+                <path class="connector-line" d="M 3500 1650 Q 3600 2100, 3600 2600" />
+
+                <!-- KEEP Score to ROI -->
+                <path class="connector-line" d="M 3200 3200 Q 2400 3400, 1500 3600" />
+
+                <!-- ROI to Deliverables -->
+                <path class="connector-line" d="M 1500 4200 Q 2200 4400, 2800 4700" />
+
+                <!-- Deliverables cluster connections -->
+                <path class="connector-line" d="M 3150 4850 L 3650 4850" />
+                <path class="connector-line" d="M 3150 5300 L 3650 5300" />
+            </svg>
+
+            <!-- SECTION LABELS -->
+            <div class="section-label" style="top: 200px; left: 600px;">01 / INTRO</div>
+            <div class="section-label" style="top: 150px; left: 1600px;">02 / RISK</div>
+            <div class="section-label" style="top: 1050px; left: 600px;">03 / URGENCY</div>
+            <div class="section-label" style="top: 800px; left: 2800px;">04 / FAILURE POINTS</div>
+            <div class="section-label" style="top: 2500px; left: 3400px;">05 / MEASUREMENT</div>
+            <div class="section-label" style="top: 3500px; left: 800px;">06 / OPPORTUNITY</div>
+            <div class="section-label" style="top: 4550px; left: 2800px;">07 / DELIVERABLES</div>
+
+            <!-- HERO -->
+            <div class="card hero-card" data-section="1">
+                <span class="tagline">FIRM6102 KEEP AUDIT SUITE</span>
+                <h1>Bitcoin Estate Audit</h1>
+                <p class="subtitle">Professional diagnosis and remediation for Bitcoin inheritance setups</p>
+            </div>
+
+            <!-- RISK CALCULATOR -->
+            <div class="card calculator-card" data-section="2">
+                <h2>The Hidden Cost</h2>
+                <p class="subtitle">Most setups contain 3+ hidden failure points</p>
+
+                <div class="slider-container">
+                    <label class="slider-label">Client Bitcoin Stack Value</label>
+                    <input type="range" min="100000" max="10000000" value="3000000" step="100000" class="slider" id="stackSlider">
+                </div>
+
+                <div class="calc-results">
+                    <div>
+                        <div class="result-label">Current Value</div>
+                        <div class="result-value" id="stackValue">$3.0M</div>
+                        <div class="result-sublabel">Bitcoin Stack</div>
+                    </div>
+                    <div>
+                        <div class="result-label">Expected Loss</div>
+                        <div class="result-value loss" id="lossValue">$2.8M</div>
+                        <div class="result-sublabel">Without continuity (93%)</div>
+                    </div>
+                </div>
+
+                <p class="note">Mathematical certainties over 30 years</p>
+            </div>
+
+            <!-- TIMELINE CARDS (Why Now) -->
+            <div class="card timeline-card" data-section="3" style="top: 1200px; left: 400px; transform: rotate(0.8deg);">
+                <div class="timeline-year">2025</div>
+                <h3>Bitcoin Maturity</h3>
+                <p>Bitcoin is now generational wealth requiring institutional-grade custody and recovery planning</p>
+            </div>
+
+            <div class="card timeline-card" style="top: 1200px; left: 950px; transform: rotate(-0.5deg);">
+                <div class="timeline-year">2010-2013</div>
+                <h3>Early Adopters Aging</h3>
+                <p>The cohort is entering peak estate planning years with significant holdings and outdated custody</p>
+            </div>
+
+            <div class="card timeline-card" style="top: 1650px; left: 400px; transform: rotate(0.3deg);">
+                <div class="timeline-year">2024</div>
+                <h3>RUFADAA Expansion</h3>
+                <p>Digital asset laws now active in 50 states—legal framework exists, but operational execution remains unaudited</p>
+            </div>
+
+            <div class="card timeline-card" style="top: 1650px; left: 950px; transform: rotate(-0.7deg);">
+                <div class="timeline-year">Rising</div>
+                <h3>Multisig Complexity</h3>
+                <p>As setups become more sophisticated, the operational failure surface expands—more keys, more risk</p>
+            </div>
+
+            <!-- FAILURE VECTORS -->
+            <div class="card vector-card" data-section="4" style="top: 900px; left: 2800px; transform: rotate(0.5deg);">
+                <div class="vector-number">01</div>
+                <h3>Keyholder Lifecycle</h3>
+                <p>How keyholders change, move, age, and become unavailable over time</p>
+            </div>
+
+            <div class="card vector-card" style="top: 900px; left: 3300px; transform: rotate(-0.6deg);">
+                <div class="vector-number">02</div>
+                <h3>Device Failure</h3>
+                <p>Hardware obsolescence, firmware updates, and physical degradation</p>
+            </div>
+
+            <div class="card vector-card" style="top: 900px; left: 3800px; transform: rotate(0.4deg);">
+                <div class="vector-number">03</div>
+                <h3>Governance Drift</h3>
+                <p>How custody rules become outdated as life circumstances change</p>
+            </div>
+
+            <div class="card vector-card" style="top: 1450px; left: 2950px; transform: rotate(-0.4deg);">
+                <div class="vector-number">04</div>
+                <h3>Update Decay</h3>
+                <p>The gradual erosion of documentation accuracy and recovery instructions</p>
+            </div>
+
+            <div class="card vector-card" style="top: 1450px; left: 3500px; transform: rotate(0.6deg);">
+                <div class="vector-number">05</div>
+                <h3>Estate Execution Path</h3>
+                <p>The actual sequence of steps required to recover Bitcoin at death or incapacity</p>
+            </div>
+
+            <!-- KEEP SCORE -->
+            <div class="card score-card" data-section="5">
+                <h2>The KEEP Score</h2>
+                <p class="subtitle">Quantified assessment of recoverability</p>
+
+                <div class="score-item">
+                    <div class="score-label"><span>Security</span><span>72</span></div>
+                    <div class="score-bar"><div class="score-fill" data-score="72" style="width: 0%"></div></div>
+                </div>
+
+                <div class="score-item">
+                    <div class="score-label"><span>Continuity</span><span>45</span></div>
+                    <div class="score-bar"><div class="score-fill" data-score="45" style="width: 0%"></div></div>
+                </div>
+
+                <div class="score-item">
+                    <div class="score-label"><span>Documentation</span><span>38</span></div>
+                    <div class="score-bar"><div class="score-fill" data-score="38" style="width: 0%"></div></div>
+                </div>
+
+                <div class="score-item">
+                    <div class="score-label"><span>Legal Integration</span><span>60</span></div>
+                    <div class="score-bar"><div class="score-fill" data-score="60" style="width: 0%"></div></div>
+                </div>
+
+                <div class="score-item">
+                    <div class="score-label"><span>Governance</span><span>28</span></div>
+                    <div class="score-bar"><div class="score-fill" data-score="28" style="width: 0%"></div></div>
+                </div>
+
+                <div class="overall-score">
+                    <div class="overall-score-label">Overall KEEP Score</div>
+                    <div class="overall-score-value">49/100</div>
+                </div>
+            </div>
+
+            <!-- ROI CALCULATOR -->
+            <div class="card roi-card" data-section="6">
+                <h2>Your Revenue Opportunity</h2>
+                <p class="subtitle">Turn Bitcoin estate planning into a revenue center</p>
+
+                <div class="credit-grid">
+                    <div class="credit-option" data-credits="5" data-cost="3000">
+                        <div class="credit-amount">5 Credits</div>
+                        <div class="credit-cost">$3,000</div>
+                        <div class="credit-detail">$600 per audit</div>
+                    </div>
+
+                    <div class="credit-option selected" data-credits="10" data-cost="5500">
+                        <div class="credit-amount">10 Credits</div>
+                        <div class="credit-cost">$5,500</div>
+                        <div class="credit-detail">$550 per audit</div>
+                        <div class="credit-badge">Most Popular</div>
+                    </div>
+
+                    <div class="credit-option" data-credits="20" data-cost="10000">
+                        <div class="credit-amount">20 Credits</div>
+                        <div class="credit-cost">$10,000</div>
+                        <div class="credit-detail">$500 per audit</div>
+                        <div class="credit-badge">Best Value</div>
+                    </div>
+                </div>
+
+                <div class="resell-control">
+                    <label class="slider-label">Your Resell Price Per Audit</label>
+                    <div class="resell-value">$<span id="resellPrice">2,500</span></div>
+                    <input type="range" min="1500" max="3500" value="2500" step="100" class="slider" id="resellSlider">
+                </div>
+
+                <div class="roi-result">
+                    <div class="result-label">Your Profit Potential</div>
+                    <div class="roi-main-value" id="roiValue">$19,500</div>
+                    <div class="roi-breakdown">
+                        <span id="roiCredits">10</span> audits × $<span id="roiMargin">1,950</span> profit per audit
+                    </div>
+                    <div class="roi-multiplier">
+                        <span id="roiMultiplier">4.5</span>× ROI
+                    </div>
+                </div>
+
+                <p class="note">Plus $500 one-time onboarding fee</p>
+            </div>
+
+            <!-- DELIVERABLES -->
+            <div class="card deliverable-card" data-section="7" style="top: 4600px; left: 2800px; transform: rotate(0.3deg);">
+                <h3>KEEP Score</h3>
+                <p>Quantified recoverability rating across security, legal, operational, and continuity dimensions</p>
+            </div>
+
+            <div class="card deliverable-card" style="top: 4600px; left: 3300px; transform: rotate(-0.5deg);">
+                <h3>SPOF Analysis</h3>
+                <p>Identification of every single point of failure in the current custody and recovery setup</p>
+            </div>
+
+            <div class="card deliverable-card" style="top: 4600px; left: 3800px; transform: rotate(0.4deg);">
+                <h3>Governance Gaps</h3>
+                <p>Detailed mapping of missing policies, unclear roles, and undocumented procedures</p>
+            </div>
+
+            <div class="card deliverable-card" style="top: 5050px; left: 2800px; transform: rotate(-0.3deg);">
+                <h3>Multisig Stress Test</h3>
+                <p>Scenario-based testing of keyholder availability, device access, and recovery execution</p>
+            </div>
+
+            <div class="card deliverable-card" style="top: 5050px; left: 3300px; transform: rotate(0.6deg);">
+                <h3>Prototype Little Shard</h3>
+                <p>Draft governance file with roles, flows, and version control ready for implementation</p>
+            </div>
+
+            <div class="card deliverable-card" style="top: 5050px; left: 3800px; transform: rotate(-0.4deg);">
+                <h3>Fix Roadmap</h3>
+                <p>Prioritized action plan with clear steps to remediate every identified vulnerability</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const viewport = document.getElementById('viewport');
+        const canvas = document.getElementById('canvas');
+        const zoomInBtn = document.getElementById('zoomIn');
+        const zoomOutBtn = document.getElementById('zoomOut');
+        const resetViewBtn = document.getElementById('resetView');
+        const zoomLevelEl = document.getElementById('zoomLevel');
+
+        let scale = 0.35;
+        let translateX = 150;
+        let translateY = 100;
+        let isDragging = false;
+        let startX, startY;
+        let currentSectionIndex = -1;
+
+        // Touch support variables
+        let touchStartDist = 0;
+        let touchStartScale = 1;
+        let isTouching = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // Section positions for keyboard navigation
+        const sections = [
+            { x: 500, y: 400, scale: 1.1, name: 'Intro' },
+            { x: 1550, y: 450, scale: 0.95, name: 'Risk' },
+            { x: 700, y: 1450, scale: 0.65, name: 'Urgency' },
+            { x: 3300, y: 1150, scale: 0.7, name: 'Failure Points' },
+            { x: 3600, y: 2850, scale: 0.85, name: 'KEEP Score' },
+            { x: 950, y: 3900, scale: 0.75, name: 'Opportunity' },
+            { x: 3300, y: 4850, scale: 0.65, name: 'Deliverables' }
+        ];
+
+        function updateTransform() {
+            canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+            zoomLevelEl.textContent = Math.round(scale * 100) + '%';
+            updateMinimap();
+        }
+
+        function zoomTo(targetScale, centerX = viewport.offsetWidth / 2, centerY = viewport.offsetHeight / 2) {
+            const oldScale = scale;
+            scale = Math.max(0.2, Math.min(2, targetScale));
+
+            const scaleRatio = scale / oldScale;
+            translateX = centerX - (centerX - translateX) * scaleRatio;
+            translateY = centerY - (centerY - translateY) * scaleRatio;
+
+            updateTransform();
+        }
+
+        function panTo(x, y, targetScale = scale, sectionName = null) {
+            scale = targetScale;
+            translateX = viewport.offsetWidth / 2 - x * scale;
+            translateY = viewport.offsetHeight / 2 - y * scale;
+            updateTransform();
+
+            // Show section indicator if section name provided
+            if (sectionName) {
+                showSectionIndicator(sectionName);
+            }
+        }
+
+        function showSectionIndicator(name) {
+            const indicator = document.getElementById('sectionIndicator');
+            indicator.textContent = name;
+            indicator.classList.add('active');
+
+            // Hide after 2 seconds
+            setTimeout(() => {
+                indicator.classList.remove('active');
+            }, 2000);
+        }
+
+        function goToSection(index) {
+            if (index >= 0 && index < sections.length) {
+                currentSectionIndex = index;
+                const section = sections[index];
+                panTo(section.x, section.y, section.scale, section.name);
+            }
+        }
+
+        // Mouse wheel zoom - smoother increments for trackpad
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.97 : 1.03;
+            zoomTo(scale * delta, e.clientX, e.clientY);
+        });
+
+        // Drag to pan (mouse)
+        viewport.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.card, .control-btn, .slider')) return;
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            viewport.classList.add('grabbing');
+        });
+
+        viewport.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            updateTransform();
+        });
+
+        viewport.addEventListener('mouseup', () => {
+            isDragging = false;
+            viewport.classList.remove('grabbing');
+        });
+
+        viewport.addEventListener('mouseleave', () => {
+            isDragging = false;
+            viewport.classList.remove('grabbing');
+        });
+
+        // Touch support
+        function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function getTouchCenter(touches) {
+            return {
+                x: (touches[0].clientX + touches[1].clientX) / 2,
+                y: (touches[0].clientY + touches[1].clientY) / 2
+            };
+        }
+
+        viewport.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.card, .control-btn, .slider, .mobile-nav-btn, .overview-btn')) return;
+
+            if (e.touches.length === 2) {
+                // Pinch zoom
+                e.preventDefault();
+                touchStartDist = getTouchDistance(e.touches);
+                touchStartScale = scale;
+                isTouching = true;
+            } else if (e.touches.length === 1) {
+                // Pan
+                const touch = e.touches[0];
+                touchStartX = touch.clientX - translateX;
+                touchStartY = touch.clientY - translateY;
+                isTouching = true;
+            }
+        }, { passive: false });
+
+        viewport.addEventListener('touchmove', (e) => {
+            if (!isTouching) return;
+
+            if (e.touches.length === 2) {
+                // Pinch zoom
+                e.preventDefault();
+                const currentDist = getTouchDistance(e.touches);
+                const center = getTouchCenter(e.touches);
+                const newScale = touchStartScale * (currentDist / touchStartDist);
+                zoomTo(newScale, center.x, center.y);
+            } else if (e.touches.length === 1) {
+                // Pan
+                e.preventDefault();
+                const touch = e.touches[0];
+                translateX = touch.clientX - touchStartX;
+                translateY = touch.clientY - touchStartY;
+                updateTransform();
+            }
+        }, { passive: false });
+
+        viewport.addEventListener('touchend', () => {
+            isTouching = false;
+            touchStartDist = 0;
+        });
+
+        // Zoom buttons (hidden but keep functionality for keyboard shortcuts)
+        if (zoomInBtn) zoomInBtn.addEventListener('click', () => zoomTo(scale * 1.15));
+        if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => zoomTo(scale * 0.85));
+        if (resetViewBtn) resetViewBtn.addEventListener('click', () => panTo(1000, 500, 0.35));
+
+        // Overview button
+        const overviewBtn = document.getElementById('overviewBtn');
+        overviewBtn.addEventListener('click', () => {
+            currentSectionIndex = -1;
+            panTo(1000, 500, 0.35, 'Overview');
+        });
+
+        // Mobile navigation buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSectionIndex > 0) {
+                goToSection(currentSectionIndex - 1);
+            } else {
+                currentSectionIndex = -1;
+                panTo(1000, 500, 0.35, 'Overview');
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSectionIndex < sections.length - 1) {
+                goToSection(currentSectionIndex + 1);
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            const num = parseInt(e.key);
+            if (num >= 1 && num <= 7) {
+                goToSection(num - 1);
+            } else if (e.key === '0') {
+                currentSectionIndex = -1;
+                panTo(1000, 500, 0.35, 'Overview');
+            } else if (e.key === '+' || e.key === '=') {
+                zoomTo(scale * 1.15);
+            } else if (e.key === '-') {
+                zoomTo(scale * 0.85);
+            } else if (e.key === 'ArrowRight') {
+                // Next section
+                if (currentSectionIndex < sections.length - 1) {
+                    goToSection(currentSectionIndex + 1);
+                }
+            } else if (e.key === 'ArrowLeft') {
+                // Previous section
+                if (currentSectionIndex > 0) {
+                    goToSection(currentSectionIndex - 1);
+                } else if (currentSectionIndex === -1 || currentSectionIndex === 0) {
+                    // Go to overview
+                    currentSectionIndex = -1;
+                    panTo(1000, 500, 0.35, 'Overview');
+                }
+            }
+        });
+
+        // Minimap
+        function updateMinimap() {
+            const minimapViewport = document.getElementById('minimapViewport');
+            const canvasWidth = 6000;
+            const canvasHeight = 5500;
+            const minimapWidth = 200;
+            const minimapHeight = 183;
+
+            const scaleX = minimapWidth / canvasWidth;
+            const scaleY = minimapHeight / canvasHeight;
+
+            const viewportWidth = viewport.offsetWidth / scale;
+            const viewportHeight = viewport.offsetHeight / scale;
+            const viewportX = -translateX / scale;
+            const viewportY = -translateY / scale;
+
+            minimapViewport.style.left = (viewportX * scaleX) + 'px';
+            minimapViewport.style.top = (viewportY * scaleY) + 'px';
+            minimapViewport.style.width = (viewportWidth * scaleX) + 'px';
+            minimapViewport.style.height = (viewportHeight * scaleY) + 'px';
+        }
+
+        // Risk Calculator
+        const stackSlider = document.getElementById('stackSlider');
+        const stackValue = document.getElementById('stackValue');
+        const lossValue = document.getElementById('lossValue');
+
+        stackSlider.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            const loss = value * 0.93;
+            stackValue.textContent = '$' + (value / 1000000).toFixed(1) + 'M';
+            lossValue.textContent = '$' + (loss / 1000000).toFixed(1) + 'M';
+        });
+
+        // ROI Calculator
+        const creditOptions = document.querySelectorAll('.credit-option');
+        const resellSlider = document.getElementById('resellSlider');
+        const resellPrice = document.getElementById('resellPrice');
+        const roiValue = document.getElementById('roiValue');
+        const roiCredits = document.getElementById('roiCredits');
+        const roiMargin = document.getElementById('roiMargin');
+        const roiMultiplier = document.getElementById('roiMultiplier');
+
+        let selectedCredits = 10;
+        let selectedCost = 5500;
+        let selectedResellPrice = 2500;
+
+        creditOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                creditOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedCredits = parseInt(option.dataset.credits);
+                selectedCost = parseInt(option.dataset.cost);
+                calculateROI();
+            });
+        });
+
+        resellSlider.addEventListener('input', (e) => {
+            selectedResellPrice = parseInt(e.target.value);
+            resellPrice.textContent = selectedResellPrice.toLocaleString();
+            calculateROI();
+        });
+
+        function calculateROI() {
+            const costPerAudit = selectedCost / selectedCredits;
+            const marginPerAudit = selectedResellPrice - costPerAudit;
+            const totalProfit = marginPerAudit * selectedCredits;
+            const totalRevenue = selectedResellPrice * selectedCredits;
+            const multiplier = (totalRevenue / selectedCost).toFixed(1);
+
+            roiValue.textContent = '$' + totalProfit.toLocaleString();
+            roiCredits.textContent = selectedCredits;
+            roiMargin.textContent = marginPerAudit.toLocaleString();
+            roiMultiplier.textContent = multiplier;
+        }
+
+        // Animate score bars when zoomed to that section
+        let scoresAnimated = false;
+        function animateScores() {
+            if (scoresAnimated) return;
+            scoresAnimated = true;
+            document.querySelectorAll('.score-fill').forEach((fill, index) => {
+                setTimeout(() => {
+                    fill.style.width = fill.dataset.score + '%';
+                }, index * 100);
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '5') {
+                setTimeout(animateScores, 400);
+            }
+        });
+
+        // Detect mobile and adjust initial view
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Initialize
+        calculateROI();
+        if (isMobile()) {
+            // Start at first section on mobile for better UX
+            goToSection(0);
+        } else {
+            updateTransform();
+        }
+    </script>
+</body>
+</html>
