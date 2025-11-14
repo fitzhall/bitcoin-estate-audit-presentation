@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Estate Planning by Wealth Level - Complete Guides | Firm6102</title>
+    <meta name="description" content="Expert Bitcoin estate planning guides for every wealth level from $100K to $10M+. Find strategies, trust structures, and professional guidance tailored to your portfolio size.">
+    
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content="Bitcoin Estate Planning by Wealth Level - Expert Guides">
+    <meta property="og:description" content="Comprehensive Bitcoin estate planning strategies for every portfolio size. From starting wealth to ultra-high net worth dynasty planning.">
+    <meta property="og:type" content="website">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-navy': '#1a2332',
+                        'bitcoin-gold': '#f7931a',
+                        'charcoal': '#2c3e50',
+                        'light-gray': '#f8f9fa',
+                        'accent-silver': '#95a5a6'
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'Georgia', 'serif'],
+                        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #1a2332 0%, #2c3e50 100%);
+        }
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .wealth-card {
+            transition: all 0.3s ease;
+        }
+        .wealth-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .featured-badge {
+            background: linear-gradient(135deg, #f7931a 0%, #ff8c00 100%);
+        }
+        .wealth-range-badge {
+            background: linear-gradient(135deg, #1a2332 0%, #2c3e50 100%);
+        }
+    </style>
+</head>
+<body class="font-sans text-charcoal">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-deep-navy">
+                        FIRM<span class="text-bitcoin-gold">6102</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/about" class="text-gray-700 hover:text-bitcoin-gold transition-colors">About</a>
+                    <a href="/services/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">Services</a>
+                    <a href="/states/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">State Guides</a>
+                    <a href="/wealth/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">Wealth Guides</a>
+                    <a href="/professionals/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">For Professionals</a>
+                    <a href="/tools/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">Tools & Templates</a>
+                    <a href="/keep-protocol/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">KEEP Protocol</a>
+                    <a href="/learn/" class="text-gray-700 hover:text-bitcoin-gold transition-colors">Learn</a>
+                    <a href="/contact" class="text-gray-700 hover:text-bitcoin-gold transition-colors">Contact</a>
+                    <a href="/consultation" class="ml-4 px-6 py-2 bg-bitcoin-gold text-white rounded-lg hover:bg-orange-600 transition-colors">
+                        Schedule Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-6xl font-display font-bold text-white mb-4">Bitcoin Estate Planning by Wealth Level</h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                Every portfolio size requires different strategies. Find expert guidance tailored to your Bitcoin wealth level, from starting portfolios to ultra-high net worth dynasty planning.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#wealth-levels" class="px-8 py-4 bg-bitcoin-gold text-white font-semibold rounded-lg hover:bg-orange-600 transition-all transform hover:scale-105">
+                    Find Your Wealth Level
+                </a>
+                <a href="/consultation" class="px-8 py-4 bg-transparent text-white font-semibold rounded-lg border-2 border-white hover:bg-white hover:text-deep-navy transition-all">
+                    Get Personalized Plan
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wealth Level Calculator -->
+    <section class="py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-3xl font-display font-bold text-deep-navy mb-6 text-center">Find Your Wealth Planning Strategy</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold text-deep-navy mb-4">By Portfolio Value</h3>
+                        <div class="space-y-3">
+                            <a href="#100k-500k" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">$100K - $500K</span>
+                                <span class="text-sm block">Foundation strategies</span>
+                            </a>
+                            <a href="#500k-1m" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">$500K - $1M</span>
+                                <span class="text-sm block">Advanced planning</span>
+                            </a>
+                            <a href="#1m-5m" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">$1M - $5M</span>
+                                <span class="text-sm block">Dynasty trusts</span>
+                            </a>
+                            <a href="#5m-plus" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">$5M+</span>
+                                <span class="text-sm block">Elite strategies</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-deep-navy mb-4">By Life Stage</h3>
+                        <div class="space-y-3">
+                            <a href="#young-professional" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">Young Professional</span>
+                                <span class="text-sm block">30-40 year horizon</span>
+                            </a>
+                            <a href="#business-owner" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">Business Owner</span>
+                                <span class="text-sm block">Business integration</span>
+                            </a>
+                            <a href="#retirement" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">Retirement Planning</span>
+                                <span class="text-sm block">Legacy focus</span>
+                            </a>
+                            <a href="#inheritance" class="block p-3 bg-gray-50 rounded hover:bg-bitcoin-gold hover:text-white transition-colors">
+                                <span class="font-semibold">Inheritance Planning</span>
+                                <span class="text-sm block">Multi-generational</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wealth Level Guides -->
+    <section id="wealth-levels" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-display font-bold text-deep-navy mb-2 text-center">Estate Planning by Portfolio Size</h2>
+            <p class="text-gray-600 text-center mb-12">Expert strategies for every Bitcoin wealth level</p>
+            
+            <!-- Starting Wealth: $100K-$500K -->
+            <div id="100k-500k" class="mb-12">
+                <h3 class="text-2xl font-display font-bold text-deep-navy mb-6">Starting Wealth: Building Your Foundation</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <a href="/wealth/bitcoin-estate-planning-for-100k-500k/" class="bg-white rounded-xl shadow-lg overflow-hidden wealth-card block">
+                        <div class="relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="wealth-range-badge text-white text-xs font-semibold px-3 py-1 rounded-full">$100K-$500K</span>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="text-2xl font-display font-bold text-deep-navy mb-3">Bitcoin Estate Planning for $100K-$500K</h4>
+                                <div class="space-y-2 mb-4 text-gray-600">
+                                    <p class="text-sm">✓ Cost-effective multi-signature wallets</p>
+                                    <p class="text-sm">✓ Revocable trust strategies</p>
+                                    <p class="text-sm">✓ Family education programs</p>
+                                    <p class="text-sm">✓ Professional vs DIY guidance</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">Perfect for Bitcoin holders entering the top 1%. Learn how to protect your growing wealth without overpaying for unnecessary complexity.</p>
+                                <span class="text-bitcoin-gold font-semibold flex items-center">
+                                    Read Complete Guide 
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/wealth/bitcoin-estate-planning-for-500k-1m/" class="bg-white rounded-xl shadow-lg overflow-hidden wealth-card block">
+                        <div class="relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="wealth-range-badge text-white text-xs font-semibold px-3 py-1 rounded-full">$500K-$1M</span>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="text-2xl font-display font-bold text-deep-navy mb-3">Bitcoin Estate Planning for $500K-$1M</h4>
+                                <div class="space-y-2 mb-4 text-gray-600">
+                                    <p class="text-sm">✓ Advanced trust structures (GRATs, CRTs)</p>
+                                    <p class="text-sm">✓ Professional team assembly</p>
+                                    <p class="text-sm">✓ Tax optimization strategies</p>
+                                    <p class="text-sm">✓ State planning integration</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">The "danger zone" where DIY mistakes become costly. Discover when and how to engage professional help for serious wealth protection.</p>
+                                <span class="text-bitcoin-gold font-semibold flex items-center">
+                                    Read Complete Guide 
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Serious Wealth: $1M-$5M -->
+            <div id="1m-5m" class="mb-12">
+                <h3 class="text-2xl font-display font-bold text-deep-navy mb-6">Serious Wealth: Dynasty Planning Territory</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <a href="/wealth/bitcoin-estate-planning-for-1m-2m/" class="bg-white rounded-xl shadow-lg overflow-hidden wealth-card block">
+                        <div class="relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="featured-badge text-white text-xs font-semibold px-3 py-1 rounded-full">Most Popular</span>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="text-2xl font-display font-bold text-deep-navy mb-3">Bitcoin Estate Planning for $1M-$2M</h4>
+                                <div class="space-y-2 mb-4 text-gray-600">
+                                    <p class="text-sm">✓ Dynasty trust implementation</p>
+                                    <p class="text-sm">✓ Institutional-grade security</p>
+                                    <p class="text-sm">✓ Multi-state planning</p>
+                                    <p class="text-sm">✓ Family office preparation</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">You've entered the top 0.1% of Bitcoin holders. Learn sophisticated strategies used by ultra-wealthy families to preserve wealth for generations.</p>
+                                <span class="text-bitcoin-gold font-semibold flex items-center">
+                                    Read Complete Guide 
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/wealth/bitcoin-estate-planning-for-2m-5m/" class="bg-white rounded-xl shadow-lg overflow-hidden wealth-card block">
+                        <div class="relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="wealth-range-badge text-white text-xs font-semibold px-3 py-1 rounded-full">$2M-$5M</span>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="text-2xl font-display font-bold text-deep-navy mb-3">Bitcoin Estate Planning for $2M-$5M</h4>
+                                <div class="space-y-2 mb-4 text-gray-600">
+                                    <p class="text-sm">✓ Perpetual dynasty trusts</p>
+                                    <p class="text-sm">✓ Private placement life insurance</p>
+                                    <p class="text-sm">✓ Charitable planning integration</p>
+                                    <p class="text-sm">✓ Family office operations</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">Ultra-high net worth territory requiring billionaire-level strategies. Discover how the top 0.01% protect and grow Bitcoin wealth across generations.</p>
+                                <span class="text-bitcoin-gold font-semibold flex items-center">
+                                    Read Complete Guide 
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Elite Wealth: $5M+ -->
+            <div id="5m-plus" class="mb-12">
+                <h3 class="text-2xl font-display font-bold text-deep-navy mb-6">Elite Wealth: Sovereign Dynasty Territory</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <a href="/wealth/bitcoin-estate-planning-for-5m-10m/" class="bg-white rounded-xl shadow-lg overflow-hidden wealth-card block">
+                        <div class="relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="wealth-range-badge text-white text-xs font-semibold px-3 py-1 rounded-full">$5M-$10M</span>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="text-2xl font-display font-bold text-deep-navy mb-3">Bitcoin Estate Planning for $5M-$10M</h4>
+                                <div class="space-y-2 mb-4 text-gray-600">
+                                    <p class="text-sm">✓ Multi-jurisdictional structures</p>
+                                    <p class="text-sm">✓ Single family office strategy</p>
+                                    <p class="text-sm">✓ Global trust networks</p>
+                                    <p class="text-sm">✓ Diplomatic advantages</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">Elite dynasty territory for the top 0.001%. Learn how to build a global trust empire that protects wealth across borders and generations.</p>
+                                <span class="text-bitcoin-gold font-semibold flex items-center">
+                                    Read Complete Guide 
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/wealth/bitcoin-estate-planning-for-10m/" class="bg-white rounded-xl shadow-lg overflow-hidden wealth-card block">
+                        <div class="relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="featured-badge text-white text-xs font-semibold px-3 py-1 rounded-full">Ultra Elite</span>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="text-2xl font-display font-bold text-deep-navy mb-3">Bitcoin Estate Planning for $10M+</h4>
+                                <div class="space-y-2 mb-4 text-gray-600">
+                                    <p class="text-sm">✓ Sovereign wealth strategies</p>
+                                    <p class="text-sm">✓ Multi-national trust empires</p>
+                                    <p class="text-sm">✓ Private banking integration</p>
+                                    <p class="text-sm">✓ Nation-state level planning</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">Sovereign wealth territory for the top 0.0001%. Discover nation-state level strategies for building and protecting generational Bitcoin empires.</p>
+                                <span class="text-bitcoin-gold font-semibold flex items-center">
+                                    Read Complete Guide 
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Specialized Guides -->
+            <div id="specialized" class="mb-12">
+                <h3 class="text-2xl font-display font-bold text-deep-navy mb-6">Specialized Planning Guides</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <a id="young-professional" href="/wealth/young-professional-bitcoin-estate-planning/" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow wealth-card">
+                        <h4 class="text-lg font-semibold text-deep-navy mb-2">Young Professional</h4>
+                        <p class="text-sm text-gray-600 mb-3">30-40 year wealth building horizon with systematic accumulation strategies.</p>
+                        <span class="text-bitcoin-gold font-semibold text-sm">Learn More →</span>
+                    </a>
+
+                    <a id="business-owner" href="/wealth/business-owner-bitcoin-estate-planning/" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow wealth-card">
+                        <h4 class="text-lg font-semibold text-deep-navy mb-2">Business Owner</h4>
+                        <p class="text-sm text-gray-600 mb-3">Integrate Bitcoin planning with business succession and tax strategies.</p>
+                        <span class="text-bitcoin-gold font-semibold text-sm">Learn More →</span>
+                    </a>
+
+                    <a id="retirement" href="/wealth/retirement-bitcoin-estate-planning/" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow wealth-card">
+                        <h4 class="text-lg font-semibold text-deep-navy mb-2">Retirement Planning</h4>
+                        <p class="text-sm text-gray-600 mb-3">Balance retirement income with multi-generational wealth transfer.</p>
+                        <span class="text-bitcoin-gold font-semibold text-sm">Learn More →</span>
+                    </a>
+
+                    <a id="inheritance" href="/wealth/bitcoin-inheritance-planning/" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow wealth-card">
+                        <h4 class="text-lg font-semibold text-deep-navy mb-2">Inheritance Planning</h4>
+                        <p class="text-sm text-gray-600 mb-3">Comprehensive strategies for all wealth levels and family structures.</p>
+                        <span class="text-bitcoin-gold font-semibold text-sm">Learn More →</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wealth Planning Tool -->
+    <section class="py-20 bg-gradient-to-r from-deep-navy to-charcoal">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-display font-bold text-white mb-4">
+                Not Sure Which Strategy Fits Your Situation?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Our experts can analyze your specific wealth level, family structure, and goals to create a personalized Bitcoin estate plan
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/consultation" class="px-8 py-4 bg-bitcoin-gold text-white font-semibold rounded-lg hover:bg-orange-600 transition-all transform hover:scale-105">
+                    Get Your Custom Plan
+                </a>
+                <a href="/learn/" class="px-8 py-4 bg-transparent text-white font-semibold rounded-lg border-2 border-white hover:bg-white hover:text-deep-navy transition-all">
+                    Learn The Basics First
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-deep-navy text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-1">
+                    <div class="text-2xl font-bold mb-4">
+                        FIRM<span class="text-bitcoin-gold">6102</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Architects of Sovereign Wealth in the Digital Age
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="/services/bitcoin-estate-planning" class="hover:text-bitcoin-gold transition-colors">Estate Planning</a></li>
+                        <li><a href="/keep-protocol/" class="hover:text-bitcoin-gold transition-colors">KEEP Protocol</a></li>
+                        <li><a href="/services/family-office" class="hover:text-bitcoin-gold transition-colors">Family Office</a></li>
+                        <li><a href="/services/corporate-treasury" class="hover:text-bitcoin-gold transition-colors">Corporate Treasury</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Learn More</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="/about" class="hover:text-bitcoin-gold transition-colors">About Us</a></li>
+                        <li><a href="/states/" class="hover:text-bitcoin-gold transition-colors">State Guides</a></li>
+                        <li><a href="/wealth/" class="hover:text-bitcoin-gold transition-colors">Wealth Guides</a></li>
+                        <li><a href="/learn/" class="hover:text-bitcoin-gold transition-colors">Knowledge Center</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="/privacy" class="hover:text-bitcoin-gold transition-colors">Privacy Policy</a></li>
+                        <li><a href="/terms" class="hover:text-bitcoin-gold transition-colors">Terms of Service</a></li>
+                        <li><a href="/disclaimer" class="hover:text-bitcoin-gold transition-colors">Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Firm6102. All rights reserved. | Professional Bitcoin Estate Planning Services</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

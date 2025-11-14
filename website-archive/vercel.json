@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "buildCommand": "",
+  "devCommand": "python3 server.py",
+  "installCommand": "",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/bitcoin-sovereignty/(.*)",
+      "destination": "/bitcoin-sovereignty/$1.html"
+    },
+    {
+      "source": "/states/(.*)",
+      "destination": "/states/$1.html"
+    },
+    {
+      "source": "/services/(.*)",
+      "destination": "/services/$1.html"
+    },
+    {
+      "source": "/keep-protocol/(.*)",
+      "destination": "/keep-protocol/$1.html"
+    },
+    {
+      "source": "/resources/(.*)",
+      "destination": "/resources/$1.html"
+    },
+    {
+      "source": "/government-policy/(.*)",
+      "destination": "/government-policy/$1.html"
+    },
+    {
+      "source": "/estate-planning/(.*)",
+      "destination": "/estate-planning/$1.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(jpg|jpeg|png|gif|svg|webp|ico)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    }
+  ]
+}

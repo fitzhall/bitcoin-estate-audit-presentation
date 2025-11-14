@@ -1,0 +1,17 @@
+{
+  "name": "firm6102-website",
+  "version": "1.0.0",
+  "description": "Firm6102 - Bitcoin Sovereignty Estate Planning Authority",
+  "scripts": {
+    "dev": "python3 server.py",
+    "build": "echo 'Static site - no build required'"
+  },
+  "keywords": [
+    "bitcoin",
+    "estate-planning",
+    "sovereignty",
+    "keep-protocol"
+  ],
+  "author": "Firm6102",
+  "license": "MIT"
+}
